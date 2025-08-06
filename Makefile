@@ -1,4 +1,3 @@
-
 venv:
 	python3.12 -m venv venv
 	./venv/bin/pip3 -q install --upgrade pip wheel
