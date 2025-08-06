@@ -6,4 +6,3 @@
 Если уведомление ни по одному каналу не сработало, сервис выдаст сообщение "Все способы отправки завершились неудачей.".
 Пример запуска скрипта
 python3 ./src/main.py --user '{"email": "user@example.com", "phone": "+1234567890", "telegram_chat_id": "TELEGRAM_CHAT_ID"}' --subject 'test' --message 'test message'
-
