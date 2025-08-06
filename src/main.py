@@ -1,11 +1,14 @@
 import re
 from dataclasses import dataclass
-
-from .exceptions import BadEmailFormat
-from .reg import regex
-from .senders.EmailSender import EmailSender
-from .senders.SMSSender import SMSSender
-from .senders.TelegramSender import TelegramSender
+from dotenv import load_dotenv
+from exceptions import BadEmailFormat, BadUserData
+from reg import regex
+from senders.EmailSender import EmailSender
+from senders.SMSSender import SMSSender
+from senders.TelegramSender import TelegramSender
+import argparse
+import os
+import json
 
 
 @dataclass
@@ -49,11 +52,20 @@ class NotificationService:
 
 
 if __name__ == "__main__":
-    user_data = {
-        "email": "user@example.com",
-        "phone": "+1234567890",
-        "telegram_chat_id": "TELEGRAM_CHAT_ID",
-    }
+    basedir = os.path.abspath(os.path.dirname(__file__))
+    load_dotenv(os.path.join(basedir, 'dev.env'))
+
+    parser = argparse.ArgumentParser(description="Parser for notification.")
+    parser.add_argument("--user",type=str, help="user data")
+    parser.add_argument("--subject", help="subject for mail")
+    parser.add_argument("--message", help="message")
+    args = parser.parse_args()
+
+    try:
+        user_data = json.loads(args.user)
+    except json.decoder.JSONDecodeError as ex:
+        raise BadUserData(f'{args.user} wrong data. {repr(ex)}')
+
     service = NotificationService(user_data)
 
-    service.notify_user("Тестовое уведомление", "Это тестовое уведомление!")
+    service.notify_user(args.subject, args.message)

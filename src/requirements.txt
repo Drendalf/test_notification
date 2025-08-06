@@ -2,3 +2,4 @@ twilio
 bandit==1.7.5
 pre-commit==3.4.0
 requests
+dotenv
